@@ -24,3 +24,5 @@ A simple python program for placing incoming freshman into floors
     ```
     pip install -r requirements.txt
     ```
+3. Run `main.py` to see results.
+    Note that this uses `students.csv` and `floors.csv` both of which have included examples.
