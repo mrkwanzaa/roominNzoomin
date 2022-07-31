@@ -26,3 +26,8 @@ A simple python program for placing incoming freshman into floors
     ```
 3. Run `main.py` to see results.
     Note that this uses `students.csv` and `floors.csv` both of which have included examples.
+
+TODO:
+    Implement survey value adjustment 
+    Rework matching algo
+    Auto group staple groups

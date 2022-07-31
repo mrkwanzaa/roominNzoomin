@@ -24,7 +24,10 @@ if __name__ == "__main__":
     #TODO: add survey values here to modify student rankings
 
     for student in students:
-        for floor in student.prefs:
+        for idx in range(len(student.prefs)):
+            if idx > 4:
+                print(student + " not able to get top 4 prefs")
+            floor = student.prefs[idx]
             if floors[floor].openSpots > 0:
                 floors[floor].addStudent(student)
                 break

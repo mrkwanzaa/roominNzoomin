@@ -5,12 +5,12 @@ class Floor:
         self.assignedStudents = []
 
     def addStudent(self, student):
-        self.openSpots -= 1
+        self.openSpots -= student.size
         self.assignedStudents.append(student)
 
     def removeStudent(self, student):
         self.assignedStudents.remove(student)
-        self.openSpots += 1
+        self.openSpots += student.size
 
     def __str__(self):
         return str(self.assignedStudents)
