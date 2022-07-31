@@ -6,8 +6,11 @@ class Floor:
 
     def addStudent(self, student):
         self.openSpots -= 1
-        self.assignedStudents = self.assignedStudents + 1
+        self.assignedStudents.append(student)
 
     def removeStudent(self, student):
         self.assignedStudents.remove(student)
         self.openSpots += 1
+
+    def __str__(self):
+        return str(self.assignedStudents)

@@ -23,3 +23,10 @@ if __name__ == "__main__":
 
     #TODO: add survey values here to modify student rankings
 
+    for student in students:
+        for floor in student.prefs:
+            if floors[floor].openSpots > 0:
+                floors[floor].addStudent(student)
+                break
+    print([key + ": " + str(item) for (key, item) in floors.items()])
+            
