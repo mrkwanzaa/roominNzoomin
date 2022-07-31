@@ -15,7 +15,6 @@ if __name__ == "__main__":
     for (idx, row) in studentsDF.iterrows():
         prefs = list(floors.keys())
         prefs.sort(key= lambda i: row[list(floors.keys())].get(i))
-        print(prefs)
         students.append(Student(row['kerb'], prefs, 'test'))
     
     # randomize students ordering
@@ -23,13 +22,17 @@ if __name__ == "__main__":
 
     #TODO: add survey values here to modify student rankings
 
+    # Match students - rewriite using resideny algorithm (Gale-Shapely)
+    # Staples are considered one student for matching - but remove multiple floor spots
     for student in students:
         for idx in range(len(student.prefs)):
-            if idx > 4:
-                print(student + " not able to get top 4 prefs")
+            if idx > 3:
+                print(student.kerb + " not able to get top 4 prefs")
             floor = student.prefs[idx]
             if floors[floor].openSpots > 0:
                 floors[floor].addStudent(student)
                 break
+
+    # print floors with all matches   
     print([key + ": " + str(item) for (key, item) in floors.items()])
             
