@@ -24,10 +24,9 @@ A simple python program for placing incoming freshman into floors
     ```
     pip install -r requirements.txt
     ```
-3. Run `main.py` to see results.
+3. Run `python main.py` to see results.
     Note that this uses `students.csv` and `floors.csv` both of which have included examples.
 
 TODO:
-    Implement survey value adjustment 
-    Rework matching algo
+    Implement survey value adjustment in `students.py`
     Auto group staple groups
