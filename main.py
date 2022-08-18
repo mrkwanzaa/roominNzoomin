@@ -3,6 +3,13 @@ from students import Student
 import pandas as pd
 import random
 
+# Checks that at least one floor has room for staple group
+def checkForStapleRoom(size, floors):
+    for floor in floors:
+        if floor.openSpots >= size:
+            return True
+    return False
+
 if __name__ == "__main__":
     floors = {}
     students = []
@@ -27,7 +34,7 @@ if __name__ == "__main__":
         for idx in range(len(student.prefs)):
             floor = student.prefs[idx]
             # if not full - add this student
-            if floors[floor].openSpots > 0:
+            if floors[floor].openSpots >= student.size:
                 floors[floor].addStudent(student)
                 break
             # if it is full - check if this student has more compatible survey answers than anyone else
@@ -41,6 +48,7 @@ if __name__ == "__main__":
                 and floorStudents[0].prefs.index(floor) <= idx
                 and floorStudents[0].checkSurvey(floors[floor])
                 < student.checkSurvey(floors[floor])
+                and checkForStapleRoom(floorStudents[0].size, floors)
             ):
                 # if yes - bump less compatible student out and add this student
                 floors[floor].removeStudent(floorStudents[0])
