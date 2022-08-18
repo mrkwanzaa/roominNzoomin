@@ -12,5 +12,8 @@ class Student:
         self.size += 1
         self.kerb = self.kerb + ', ' + kerb
 
+    def checkSurvey(self, floor):
+        return int(self.survey == floor.survey)
+
     def __str__(self):
         return self.kerb

@@ -1,8 +1,9 @@
 
 class Floor:
-    def __init__(self, openSpots):
+    def __init__(self, openSpots, survey):
         self.openSpots = openSpots
         self.assignedStudents = []
+        self.survey = survey
 
     def addStudent(self, student):
         self.openSpots -= student.size
@@ -13,4 +14,4 @@ class Floor:
         self.openSpots += student.size
 
     def __str__(self):
-        return str(self.assignedStudents)
+        return str([student.kerb for student in self.assignedStudents])
