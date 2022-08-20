@@ -5,10 +5,11 @@ import random
 
 # Checks that at least one floor has room for staple group
 def checkForStapleRoom(size, floors):
-    for floor in floors:
+    for floor in floors.values():
         if floor.openSpots >= size:
             return True
     return False
+
 
 if __name__ == "__main__":
     floors = {}
@@ -38,25 +39,27 @@ if __name__ == "__main__":
                 floors[floor].addStudent(student)
                 break
             # if it is full - check if this student has more compatible survey answers than anyone else
+            # This function only returns true for less compatible students
             def filterStudents(currentStudent):
-                return currentStudent.prefs.index(floor) <= idx \
-                and currentStudent.checkSurvey(floors[floor]) < student.checkSurvey(floors[floor]) \
-                and checkForStapleRoom(currentStudent.size, floors)
-            floorStudents = filter(filterStudents, floors[floor].assignedStudents.copy())
-            floorStudents.sort(
-                key=lambda x: (len(floors) + x.prefs.index(floor))
-                + 0.99 * x.checkSurvey(floors[floor])
+                return (
+                    currentStudent.prefs.index(floor) <= idx
+                    and currentStudent.checkSurvey(floors[floor])
+                    < student.checkSurvey(floors[floor])
+                    and checkForStapleRoom(currentStudent.size, floors)
+                )
+
+            # Check to see if there are any
+            floorStudents = list(
+                filter(filterStudents, floors[floor].assignedStudents.copy())
             )
-            if (len(floorStudents) > 0):
-                # if yes - bump less compatible student out and add this student
+            # Sort any by compatibility
+            floorStudents.sort(key=lambda x: x.checkSurvey(floors[floor]))
+            if len(floorStudents) > 0:
+                # if yes - bump least compatible student out and add this student
                 floors[floor].removeStudent(floorStudents[0])
                 floors[floor].addStudent(student)
                 students.append(floorStudents[0])
-                print(str(floorStudents[0]) + " got bumped")
                 break
-
-            if idx > 3:
-                print(student.kerb + " not able to get top 4 prefs")
         else:
             print(str(student) + " not matched!!")
         i += 1
