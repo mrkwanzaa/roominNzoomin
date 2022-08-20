@@ -38,18 +38,16 @@ if __name__ == "__main__":
                 floors[floor].addStudent(student)
                 break
             # if it is full - check if this student has more compatible survey answers than anyone else
-            floorStudents = floors[floor].assignedStudents.copy()
+            def filterStudents(currentStudent):
+                return currentStudent.prefs.index(floor) <= idx \
+                and currentStudent.checkSurvey(floors[floor]) < student.checkSurvey(floors[floor]) \
+                and checkForStapleRoom(currentStudent.size, floors)
+            floorStudents = filter(filterStudents, floors[floor].assignedStudents.copy())
             floorStudents.sort(
                 key=lambda x: (len(floors) + x.prefs.index(floor))
                 + 0.99 * x.checkSurvey(floors[floor])
             )
-            if (
-                len(floorStudents) > 0
-                and floorStudents[0].prefs.index(floor) <= idx
-                and floorStudents[0].checkSurvey(floors[floor])
-                < student.checkSurvey(floors[floor])
-                and checkForStapleRoom(floorStudents[0].size, floors)
-            ):
+            if (len(floorStudents) > 0):
                 # if yes - bump less compatible student out and add this student
                 floors[floor].removeStudent(floorStudents[0])
                 floors[floor].addStudent(student)
