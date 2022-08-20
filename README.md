@@ -20,6 +20,10 @@ A simple python program for placing incoming freshman into floors
     ```
     source venv/bin/activate
     ```
+    Or on Windows:
+    ```
+    .\venv\Scripts\activate.bat
+    ```
     Install all requirements for development:
     ```
     pip install -r requirements.txt
