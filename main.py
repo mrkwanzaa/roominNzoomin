@@ -64,6 +64,7 @@ if __name__ == "__main__":
             print(str(student) + " not matched!!")
         i += 1
 
-    # print floors with all matches
-    for (key, item) in floors.items():
-        print(key + ": " + str(item))
+    # write floors with all matches to .txt
+    with open('output.txt', 'a') as f:
+        for (key, item) in floors.items():
+            f.write(key + ": " + str(item) + "\n")
