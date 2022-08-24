@@ -14,21 +14,24 @@ def checkForStapleRoom(size, floors):
 if __name__ == "__main__":
     floors = {}
     students = []
-
+    print("Creating floor objects")
     # initialize floor and student objects
     floorsDF = pd.read_csv("floors.csv")
     for (idx, row) in floorsDF.iterrows():
         floors[row["name"]] = Floor(row["spots"], row["survey"])
+    print("Creating student objects")
     studentsDF = pd.read_csv("students.csv")
     for (idx, row) in studentsDF.iterrows():
         prefs = list(floors.keys())
         prefs.sort(key=lambda i: row[list(floors.keys())].get(i))
         students.append(Student(row["kerb"], prefs, "test" + str(idx + 1)))
 
+    print("Randomizing student order")
     # randomize students ordering
     random.shuffle(students)
 
     # Staples are considered one student for matching - but remove multiple floor spots
+    print("Sorting...")
     i = 0
     while i < len(students):
         student = students[i]
@@ -65,6 +68,9 @@ if __name__ == "__main__":
         i += 1
 
     # write floors with all matches to .txt
+    print("Writing output")
     with open('output.txt', 'a') as f:
         for (key, item) in floors.items():
             f.write(key + ": " + str(item) + "\n")
+        f.write("=====================\n")
+    print("Done!")
