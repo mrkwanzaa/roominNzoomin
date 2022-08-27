@@ -2,9 +2,15 @@ from floors import Floor
 from students import Student
 import pandas as pd
 import random
+import sys
 
 # Checks that at least one floor has room for staple group
 def checkForStapleRoom(size, floors):
+    # Checks command line flags to prevent bumping issues
+    if '--save-staples' in sys.argv:
+        return size < 2
+    elif '--no-bump' in sys.argv:
+        return False
     for floor in floors.values():
         if floor.openSpots >= size:
             return True
@@ -18,13 +24,13 @@ if __name__ == "__main__":
     # initialize floor and student objects
     floorsDF = pd.read_csv("floors.csv")
     for (idx, row) in floorsDF.iterrows():
-        floors[row["name"]] = Floor(row["spots"], row["survey"])
+        floors[row["name"]] = Floor(row["spots"], {})
     print("Creating student objects")
     studentsDF = pd.read_csv("students.csv")
     for (idx, row) in studentsDF.iterrows():
         prefs = list(floors.keys())
         prefs.sort(key=lambda i: row[list(floors.keys())].get(i))
-        students.append(Student(row["kerb"], prefs, "test" + str(idx + 1)))
+        students.append(Student(row["kerb"], prefs))
 
     print("Randomizing student order")
     # randomize students ordering
@@ -42,7 +48,9 @@ if __name__ == "__main__":
             if floors[floor].openSpots >= student.size:
                 floors[floor].addStudent(student)
                 break
-            # This function only returns true for less compatible students
+
+            # This function only returns true for less compatible students who
+            # ranked the given floor less or equally and have room availible elsewhere
             def filterStudents(currentStudent):
                 return (
                     currentStudent.prefs.index(floor) <= idx
@@ -60,12 +68,14 @@ if __name__ == "__main__":
 
             bumpedSize = 0
             bumpedStudents = []
+            # add students to bumpedStudents until there is room for 
+            # current or we run out of bumpable students
             while (bumpedSize < student.size and len(floorStudents) > 0):
                 removedStudent = floorStudents.pop(0)
                 bumpedSize += removedStudent.size
                 bumpedStudents.append(removedStudent)
             
-            
+            # Only if we successfully bumped enough do we actually move them around
             if bumpedSize >= student.size:
                 for removedStudent in bumpedStudents:
                     floors[floor].removeStudent(removedStudent)

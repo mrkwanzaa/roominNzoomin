@@ -1,9 +1,9 @@
 
 class Floor:
-    def __init__(self, openSpots, survey):
+    def __init__(self, openSpots, rankings):
         self.openSpots = openSpots
         self.assignedStudents = []
-        self.survey = survey
+        self.rankings = rankings
 
     def addStudent(self, student):
         self.openSpots -= student.size

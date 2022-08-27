@@ -1,9 +1,8 @@
 
 class Student:
     # not sure what form surveyValues will come in yet
-    def __init__(self, kerb, prefs, surveyValues, size = 1):
+    def __init__(self, kerb, prefs, size = 1):
         self.prefs = prefs.copy()
-        self.survey = surveyValues
         self.kerb = kerb
         self.size = size
     
@@ -13,7 +12,7 @@ class Student:
         self.kerb = self.kerb + ', ' + kerb
 
     def checkSurvey(self, floor):
-        return int(self.survey == floor.survey)
+        return floor.rankings.get(self.kerb, 0)
 
     def __str__(self):
         return self.kerb
