@@ -35,13 +35,13 @@ if __name__ == "__main__":
     i = 0
     while i < len(students):
         student = students[i]
+        # run for each floor in order of preference
         for idx in range(len(student.prefs)):
             floor = student.prefs[idx]
             # if not full - add this student
             if floors[floor].openSpots >= student.size:
                 floors[floor].addStudent(student)
                 break
-            # if it is full - check if this student has more compatible survey answers than anyone else
             # This function only returns true for less compatible students
             def filterStudents(currentStudent):
                 return (
@@ -50,20 +50,30 @@ if __name__ == "__main__":
                     < student.checkSurvey(floors[floor])
                     and checkForStapleRoom(currentStudent.size, floors)
                 )
-
-            # Check to see if there are any
+            
+            # Filter out more compatible or students who ranked higher
             floorStudents = list(
                 filter(filterStudents, floors[floor].assignedStudents.copy())
             )
-            # Sort any by compatibility
+            # Sort any less compatible by compatibility
             floorStudents.sort(key=lambda x: x.checkSurvey(floors[floor]))
-            if len(floorStudents) > 0:
-                # if yes - bump least compatible student out and add this student
-                floors[floor].removeStudent(floorStudents[0])
+
+            bumpedSize = 0
+            bumpedStudents = []
+            while (bumpedSize < student.size and len(floorStudents) > 0):
+                removedStudent = floorStudents.pop(0)
+                bumpedSize += removedStudent.size
+                bumpedStudents.append(removedStudent)
+            
+            
+            if bumpedSize >= student.size:
+                for removedStudent in bumpedStudents:
+                    floors[floor].removeStudent(removedStudent)
                 floors[floor].addStudent(student)
-                students.append(floorStudents[0])
+                students.extend(bumpedStudents)
                 break
         else:
+            # This should only happen if a staple group is matched absolute last - or we have too many frosh
             print(str(student) + " not matched!!")
         i += 1
 
